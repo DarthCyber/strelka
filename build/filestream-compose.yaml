@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  filestream:
+    build:
+      context: ..
+      dockerfile: build/go/filestream/Dockerfile
+    command: strelka-filestream
+    volumes:
+      - ../configs/go/filestream:/etc/strelka:ro
+      - /nsm/:/nsm/:rw
+    restart: unless-stopped
+    container_name: strelka_filestream
