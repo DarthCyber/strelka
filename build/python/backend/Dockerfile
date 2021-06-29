@@ -60,7 +60,7 @@ RUN apt-get -qq update && \
     chmod +x /tmp/floss && \
 # Install YARA
     cd /tmp/ && \
-    curl -OL https://github.com/VirusTotal/yara/archive/v$YARA_VERSION.tar.gz && \
+    curl -OL https://github.com/VirusTotal/yara/archive/refs/tags/v$YARA_VERSION.tar.gz && \
     tar -zxvf v$YARA_VERSION.tar.gz && \
     cd yara-$YARA_VERSION/ && \
     ./bootstrap.sh && \
@@ -68,7 +68,7 @@ RUN apt-get -qq update && \
     make && make install && make check && \
 # Install yara-python
     cd /tmp/ && \
-    curl -OL https://github.com/VirusTotal/yara-python/archive/v$YARA_PYTHON_VERSION.tar.gz && \
+    curl -OL https://github.com/VirusTotal/yara-python/archive/refs/tags/v4.0.3.tar.gz && \
     tar -zxvf v$YARA_PYTHON_VERSION.tar.gz && \
     cd yara-python-$YARA_PYTHON_VERSION/ && \
     python3 setup.py build --dynamic-linking && \
@@ -105,10 +105,12 @@ RUN cd /strelka/ && \
     apt-get purge -qq python3-setuptools  && \
     apt-get clean -qq && \
     rm -rf /var/lib/apt/lists/* /strelka/ /tmp/yara* && \
-# Assign permissions to Strelka scan result logging directory
+# Assign permissions to Strelka scan result logging directory and clamdsocket, fix nasty user perms later
     mkdir /var/log/strelka/ && \
     chgrp -R 0 /var/log/strelka/ && \
-    chmod -R g=u /var/log/strelka/
+    chmod -R g=u /var/log/strelka/ && \
+    mkdir /etc/clamysock/ && \
+    chmod -R a+rwx /etc/clamysock
 
 
 USER 1001
