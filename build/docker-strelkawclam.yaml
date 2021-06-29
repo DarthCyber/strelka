@@ -1,0 +1,90 @@
+version: '3.2'
+
+networks:
+  net:
+
+volumes:
+  logs:
+
+services:
+  frontend:
+    build:
+      context: ..
+      dockerfile: build/go/frontend/Dockerfile
+    command: strelka-frontend
+    ports:
+      - "57314:57314"  # must match the port in frontend.yaml
+    networks:
+      - net
+    volumes:
+      - ../configs/go/frontend/:/etc/strelka/:ro
+      - logs:/var/log/strelka/
+    restart: unless-stopped
+    container_name: strelka_frontend_1
+    depends_on:
+      - coordinator
+      - gatekeeper
+
+  backend:
+    build:
+      context: ..
+      dockerfile: build/python/backend/Dockerfile
+    command: strelka-backend
+    shm_size: 512mb  # increase as necessary, required for some scanners
+    networks:
+      - net
+    volumes:
+      - ../socket/:/etc/clamysock/:rw
+      - ../configs/python/backend/:/etc/strelka/:ro
+      - ../configs/python/backend/rules.yara:/etc/yara/rules.yara:ro
+    restart: unless-stopped
+    container_name: strelka_customBE
+    depends_on:
+      - coordinator
+
+  manager:
+    build:
+      context: ..
+      dockerfile: build/go/manager/Dockerfile
+    command: strelka-manager
+    restart: unless-stopped
+    container_name: strelka_manager_1
+    networks:
+      - net
+    volumes:
+      - ../configs/go/manager/:/etc/strelka/:ro
+    depends_on:
+      - coordinator
+
+  coordinator:
+    image: redis:alpine
+    command: redis-server --save "" --appendonly no  # alt: use config file via volume mapping
+    container_name: strelka_coordinator_1
+    networks:
+      - net
+
+  gatekeeper:
+    image: redis:alpine
+    command: redis-server --save "" --appendonly no --maxmemory-policy allkeys-lru  # alt: use config file via volume mapping
+    container_name: strelka_gatekeeper_1
+    networks:
+      - net
+
+  clamav:
+    build:
+      context: ..
+    container_name: clamav
+    networks:
+      - net
+    volumes:
+        - type: bind
+          source: /opt/strelka/socket/
+          target: /run/clamav/
+    image: clamav/clamav:unstable
+    restart: unless-stopped
+    
+    environment:
+      - CLAMAV_NO_FRESHCLAMD=true
+      - CLAMAV_NO_CLAMD=false
+      - CLAMAV_NO_MILTERD=true
+      - CLAMD_STARTUP_TIMEOUT=1800
