@@ -12,6 +12,11 @@ tasting:
   mime_db: null
   yara_rules: '/etc/strelka/taste/'
 scanners:
+  'ScanClam':
+    - positive:
+        flavors:
+          - '*'
+      priority: 5
   #'ScanAntiword':
   #  - positive:
   #      flavors:
