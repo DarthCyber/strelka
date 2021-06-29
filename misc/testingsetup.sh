@@ -1,4 +1,6 @@
-esting
+#/bin/sh
+
+#testing
 
 mkdir /opt/strelka/socket/
 touch /etc/docker/daemon.json
