@@ -1,7 +1,4 @@
-import os
-import requests
 import clamd
-import tempfile
 
 from six import BytesIO
 from strelka import strelka
@@ -9,7 +6,7 @@ from strelka import strelka
 
 class ScanClam(strelka.Scanner):
     """Sends files to ClamAV.
-       not actually scanning the file because I had that working then I broke it...somewhere
+       Working, needs tested against known bad file, delete commented code later
     """
     def scan(self, data, file, options, expire_at):
 
@@ -18,10 +15,16 @@ class ScanClam(strelka.Scanner):
             try:
                 cd = clamd.ClamdUnixSocket("/etc/clamysock/clamd.sock",None)
 
-                scan_result = cd.instream(BytesIO(clamd.EICAR))
+                #scan_result = cd.instream(BytesIO(clamd.EICAR))
+                scan_result = cd.instream(BytesIO(data))
 
-                self.event['clamresults'] = scan_result
-                self.flags.append(scan_result['stream'][0])
+                #self.event['clamresults'] = scan_result
+                #self.flags.append(scan_result['stream'][0])
+
+                self.event['ClamResult'] = scan_result['stream'][0]
+                self.event['ClamSignature'] = scan_result['stream'][1]
+
+
 
             except:
                 self.flags.append('error_scanning')
@@ -30,4 +33,4 @@ class ScanClam(strelka.Scanner):
             self.flags.append('error_processing')
             return
 
-        self.flags.append(str(scan_result))
+        #self.flags.append(str(scan_result))
