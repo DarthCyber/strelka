@@ -80,7 +80,7 @@ services:
         - type: bind
           source: /opt/strelka/socket/
           target: /run/clamav/
-    image: "clamav/clamav:unstable"
+    image: clamav/clamav:unstable
     restart: unless-stopped
     
     environment:
