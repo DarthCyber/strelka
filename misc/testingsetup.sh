@@ -7,7 +7,6 @@ apt install net-tools
 apt install docker.io
 apt install docker-compose
 apt install docker.io
-apt install go
 apt install python
 apt install -y python3-pip
 apt install golang
