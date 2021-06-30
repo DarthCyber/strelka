@@ -13,8 +13,6 @@ apt install -y python3-pip
 apt install golang
 
 
-git clone https://github.com/target/strelka.git /opt/strelka/
-
 mkdir /opt/strelka/socket/
 chmod a+rwx /opt/strelka/socket/
 touch /etc/docker/daemon.json
