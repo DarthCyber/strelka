@@ -2,6 +2,7 @@
 
 #testing
 
+apt-get update
 apt install git
 apt install net-tools
 apt install docker.io
