@@ -27,7 +27,7 @@ x.) build the container, connection to the front end must be good or the contain
   docker-compose -f build/filestream-compose.yaml up
   *** no -d so you can watch it in the terminal submitting files *** ctrl-c will kill the container
   
-x.) submit files
+x.) submit files by dropping them in /nsm/extracted/
 
 Results are stored by default here:
 /var/lib/docker/volumes/strelka_logs/_data/strelka.log
