@@ -14,7 +14,7 @@ x.) Run testingsetup.sh
 x.) Build strelka core dockers
   docker-compose -f build/docker-strelkawclam.yaml up -d --scale backend=5
 
-On sensor (for now until deploy container is perfected)
+On sosensor (for now until deploy container is perfected)
 x.) Clone https://github.com/DarthCyber/strelka (you will neet git)
   git clone https://github.com/DarthCyber/strelka /opt/strelka/
   cd /opt/strelka  
