@@ -2,9 +2,6 @@
 
 #testing
 
-#/bin/sh
-#testing
-
 apt install git
 apt install net-tools
 apt install docker.io
