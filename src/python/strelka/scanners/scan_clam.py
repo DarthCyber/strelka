@@ -15,11 +15,7 @@ class ScanClam(strelka.Scanner):
             try:
                 cd = clamd.ClamdUnixSocket("/etc/clamysock/clamd.sock",None)
 
-                #scan_result = cd.instream(BytesIO(clamd.EICAR))
                 scan_result = cd.instream(BytesIO(data))
-
-                #self.event['clamresults'] = scan_result
-                #self.flags.append(scan_result['stream'][0])
 
                 self.event['ClamResult'] = scan_result['stream'][0]
                 self.event['ClamSignature'] = scan_result['stream'][1]
@@ -32,5 +28,4 @@ class ScanClam(strelka.Scanner):
         except:
             self.flags.append('error_processing')
             return
-
-        #self.flags.append(str(scan_result))
+        
