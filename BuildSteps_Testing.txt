@@ -1,0 +1,36 @@
+#this is for testing and not the most efficient way to do business. Will get to that someday.
+
+0.) apt-get update
+
+Core:
+1.) Clone https://github.com/DarthCyber/strelka (you will neet git)
+  git clone https://github.com/DarthCyber/strelka /opt/strelka/
+  cd /opt/strelka  
+  
+x.) Run testingsetup.sh
+  chmod +x ./misc/testingsetup.sh
+  ./misc/testingsetup.sh
+  
+x.) Build strelka core dockers
+  docker-compose -f build/docker-strelkawclam.yaml up -d --scale backend=5
+
+On sensor (for now until deploy container is perfected)
+x.) Clone https://github.com/DarthCyber/strelka (you will neet git)
+  git clone https://github.com/DarthCyber/strelka /opt/strelka/
+  cd /opt/strelka  
+  
+x.) Edit configs/go/filestream/filestream.yaml
+  change server ip and port to match your configuration of the front end
+  change file paths if necessary to globs
+  
+x.) build the container, connection to the front end must be good or the container will stop (for now)
+  docker-compose -f build/filestream-compose.yaml up
+  *** no -d so you can watch it in the terminal submitting files *** ctrl-c will kill the container
+  
+x.) submit files
+
+Results are stored by default here:
+/var/lib/docker/volumes/strelka_logs/_data/strelka.log
+
+to verify use:
+docker volume inspect strelka_logs
