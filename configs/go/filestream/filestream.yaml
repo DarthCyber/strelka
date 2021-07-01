@@ -10,7 +10,7 @@ throughput:
   delay: 0s
 files:
   patterns:
-    - '/nsm/extracted/*'
+    - '/nsm/bro/extracted/*'
   processed: '/nsm/strelkd/'
   delete: false
   gatekeeper: true
